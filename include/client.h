@@ -18,7 +18,7 @@ typedef struct {
 
 Client* createClient(char *ipVersion, char *ipAddress, int port);
 void printUsage();
-void parseArguments(int argc, char **argv, Client *client);
+Client* parseArguments(int argc, char **argv);
 void printMenu();
 void handleMenuOption(Client *client);
 void handleRideRequest(Client *client);

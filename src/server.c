@@ -55,6 +55,7 @@ void handleDriverOptions(Coordinates *clientCoords, Server *server) {
             break;
         default:
             printf("\nOpção inválida!\n");
+            printRideOptions(clientCoords, server);
             break;
     }
 }

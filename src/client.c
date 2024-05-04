@@ -35,3 +35,33 @@ void printMenu() {
     printf("| 1 - Solicitar corrida                                          |\n");
     printf("==================================================================\n");
 }
+
+void handleMenuOption(Client *client) {
+    int option;
+
+    printMenu();
+    printf("Digite a opção desejada: ");
+    scanf("%d", &option);
+
+    switch (option) {
+        case 0:
+            handleExit();
+            break;
+        case 1:
+            handleRideRequest(client);
+            break;
+        default:
+            printf("\nOpção inválida!\n");
+            printMenu();
+            break;
+    }
+}
+
+void handleRideRequest(Client *client) {
+    printf("Solicitando corrida...\n");
+}
+
+void handleExit() {
+    printf("Saindo do aplicativo...\n");
+    exit(0);
+}

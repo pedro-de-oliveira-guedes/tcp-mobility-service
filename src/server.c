@@ -40,6 +40,26 @@ void printRideOptions(Coordinates *clientCoords, Server *server) {
     printf("========================================================================\n");
 }
 
+void handleDriverOptions(Coordinates *clientCoords, Server *server) {
+    int option;
+
+    printRideOptions(clientCoords, server);
+    printf("Digite a opção desejada: ");
+    scanf("%d", &option);
+
+    switch (option) {
+        case 0:
+            handleRejectRide();
+            break;
+        case 1:
+            handleAcceptRide();
+            break;
+        default:
+            printf("\nOpção inválida!\n");
+            break;
+    }
+}
+
 void handleAcceptRide() {
     printf("\nCorrida aceita!\n");
 }

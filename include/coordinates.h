@@ -12,6 +12,6 @@ typedef struct {
     double longitude;
 } Coordinates;
 
-static double calculateHarversineDistance(Coordinates *c1, Coordinates *c2);
+double calculateHarversineDistance(Coordinates *c1, Coordinates *c2);
 
 #endif

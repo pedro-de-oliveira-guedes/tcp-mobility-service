@@ -20,6 +20,7 @@ Server* createServer(char *ipVersion, int port);
 void printUsage();
 Server* parseArguments(int argc, char **argv);
 void printRideOptions(Coordinates *clientCoords, Server *server);
+void handleDriverOptions(Coordinates *clientCoords, Server *server);
 void handleAcceptRide();
 void handleRejectRide();
 

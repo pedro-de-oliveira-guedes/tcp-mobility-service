@@ -19,7 +19,7 @@ typedef struct {
 Server* createServer(char *ipVersion, int port);
 void printUsage();
 Server* parseArguments(int argc, char **argv);
-void printRideOptions(Coordinates *client, Server *server);
+void printRideOptions(Coordinates *clientCoords, Server *server);
 void handleAcceptRide();
 void handleRejectRide();
 

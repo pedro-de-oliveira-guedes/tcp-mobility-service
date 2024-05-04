@@ -1,5 +1,4 @@
 #include "server.h"
-#include "coordinates.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +29,7 @@ Server* parseArguments(int argc, char **argv) {
 }
 
 void printRideOptions(Coordinates *clientCoords, Server *server) {
-    double distance = calculateDistance(clientCoords, server->coordinates);
+    double distance = calculateHarversineDistance(clientCoords, &server->coordinates);
     server->currentDistance = distance;
 
     printf("========================== CORRIDA DISPONÍVEL ==========================\n");

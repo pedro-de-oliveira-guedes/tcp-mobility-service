@@ -29,8 +29,8 @@ Server* parseArguments(int argc, char **argv) {
     return createServer(argv[1], atoi(argv[2]));
 }
 
-void printRideOptions(Coordinates *client, Server *server) {
-    double distance = calculateDistance(client, server->coordinates);
+void printRideOptions(Coordinates *clientCoords, Server *server) {
+    double distance = calculateDistance(clientCoords, server->coordinates);
     server->currentDistance = distance;
 
     printf("========================== CORRIDA DISPONÍVEL ==========================\n");

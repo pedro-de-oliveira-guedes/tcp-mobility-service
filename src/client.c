@@ -21,7 +21,7 @@ void printUsage() {
 }
 
 Client* parseArguments(int argc, char **argv) {
-    if (argc != 3) {
+    if (argc != 4) {
         printUsage();
         exit(1);
     }

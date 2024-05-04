@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "coordinates.h"
+#include "client.h"
 
-int main() {
-    Coordinates c1 = { 38.898556, -77.037852 };
-    Coordinates c2 = { 38.897147, -77.043934 };
+int main(int argc, char **argv) {
+    Client *client = parseArguments(argc, argv);
 
-    double distance = calculateHarversineDistance(&c1, &c2);
-
-    printf("Distance between c1 and c2: %f km\n", distance);
+    while (1) {
+        handleMenuOption(client);
+    }
 
     return 0;
 }

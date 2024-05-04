@@ -17,5 +17,5 @@ double calculateHarversineDistance(Coordinates *c1, Coordinates *c2) {
 
     double c = 2 * asin(sqrt(a));
 
-    return EARTH_RADIUS * c;
+    return (EARTH_RADIUS * c) * 1000;
 }

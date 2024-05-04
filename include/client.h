@@ -16,9 +16,12 @@ typedef struct {
     int port;
 } Client;
 
-
+Client* createClient();
 void printUsage();
 void parseArguments(int argc, char **argv, Client *client);
 void printMenu();
+void handleMenuOption(Client *client);
+void handleRideRequest(Client *client);
+void handleExit();
 
 #endif

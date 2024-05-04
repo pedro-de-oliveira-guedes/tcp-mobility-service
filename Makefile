@@ -10,8 +10,8 @@ SRC = ./src
 OBJ = ./obj
 INC = ./include
 BIN = ./bin
-OBJS = $(OBJ)/main.o $(OBJ)/coordinates.o $(OBJ)/client.o
-HDRS = $(INC)/coordinates.h $(INC)/client.h
+OBJS = $(OBJ)/main.o $(OBJ)/coordinates.o $(OBJ)/client.o $(OBJ)/server.o
+HDRS = $(INC)/coordinates.h $(INC)/client.h $(INC)/server.h
 CFLAGS = -pg -Wall -c -I $(INC)
 EXE = $(BIN)/main
 
@@ -26,6 +26,9 @@ $(OBJ)/coordinates.o: $(SRC)/coordinates.c $(HDRS)
 
 $(OBJ)/client.o: $(SRC)/client.c $(HDRS)
 	$(CC) $(CFLAGS) $(SRC)/client.c -o $(OBJ)/client.o
+
+$(OBJ)/server.o: $(SRC)/server.c $(HDRS)
+	$(CC) $(CFLAGS) $(SRC)/server.c -o $(OBJ)/server.o
 
 clean:
 	rm -f $(OBJ)/*.o $(EXE)

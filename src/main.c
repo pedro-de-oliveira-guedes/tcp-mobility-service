@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "client.h"
+#include "server.h"
 
 int main(int argc, char **argv) {
-    Client *client = parseArguments(argc, argv);
+    Server *server = parseServerArguments(argc, argv);
+    Coordinates clientCoords = {0.0, 0.0};
 
-    while (1) {
-        handleMenuOption(client);
-    }
+    handleDriverOptions(&clientCoords, server);
 
     return 0;
 }

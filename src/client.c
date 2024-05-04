@@ -15,14 +15,14 @@ Client* createClient(char *ipVersion, char *ipAddress, int port) {
     return client;
 }
 
-void printUsage() {
+void printClientUsage() {
     printf("Usage: ./client <ipv4|ipv6> <ip_address> <port>\n");
     printf("Example: ./client ipv4 127.0.0.1 50501\n");
 }
 
-Client* parseArguments(int argc, char **argv) {
+Client* parseClientArguments(int argc, char **argv) {
     if (argc != 4) {
-        printUsage();
+        printClientUsage();
         exit(1);
     }
 

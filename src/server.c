@@ -14,14 +14,14 @@ Server* createServer(char *ipVersion, int port) {
     return server;
 }
 
-void printUsage() {
+void printServerUsage() {
     printf("Usage: ./server <ipv4|ipv6> <port>\n");
     printf("Example: ./server ipv4 50501\n");
 }
 
-Server* parseArguments(int argc, char **argv) {
+Server* parseServerArguments(int argc, char **argv) {
     if (argc != 3) {
-        printUsage();
+        printServerUsage();
         exit(1);
     }
 

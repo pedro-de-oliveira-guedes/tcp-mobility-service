@@ -1,16 +1,24 @@
 #include "client.h"
+#include "network_config.h"
+
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
 Client* createClient(char *ipVersion, char *ipAddress, int port) {
     Client *client = (Client *) malloc(sizeof(Client));
 
-    client->coordinates.latitude = 0.0;
-    client->coordinates.longitude = 0.0;
-    client->ipVersion = ipVersion;
-    client->ipAddress = ipAddress;
-    client->port = port;
+    Coordinates coordinates = {-16.055684212815216, -45.14319316648692};
+    client->coordinates = coordinates;
+
+    struct sockaddr_storage socketStorage;
+    clientSocketInit(ipVersion, ipAddress, (uint16_t)port, &socketStorage);
 
     return client;
 }

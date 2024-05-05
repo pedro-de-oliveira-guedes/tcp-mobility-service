@@ -7,6 +7,11 @@
 #ifndef NETWORK_CONFIG
 #define NETWORK_CONFIG
 
+#include <stdint.h>
+#include <stddef.h>
+
+#include <sys/socket.h>
+
 /**
  * @brief Logs an error message and exits the program with failure.
  *

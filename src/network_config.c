@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include <arpa/inet.h>
+#include <sys/socket.h>
 
 void logError(char *message) {
     perror(message);
@@ -22,7 +23,7 @@ int clientSocketInit(char *ipVersion, char *ipAddress, uint16_t port, struct soc
 
     struct in_addr hostAddrIpv4; // Stores the IPv4 address in network byte order
     // Checks if the IP version is IPv4 and the IP address is valid, if so, it parses the IP address and port
-    if (ipVersion == "ipv4" && inet_pton(AF_INET, ipAddress, &hostAddrIpv4)) {
+    if (strcmp(ipVersion, "ipv4") == 0 && inet_pton(AF_INET, ipAddress, &hostAddrIpv4)) {
         struct sockaddr_in *ipv4 = (struct sockaddr_in *) storage;
 
         ipv4->sin_family = AF_INET; // Sets the address family to IPv4
@@ -34,7 +35,7 @@ int clientSocketInit(char *ipVersion, char *ipAddress, uint16_t port, struct soc
 
     struct in6_addr hostAddrIpv6; // Stores the IPv6 address in network byte order
     // Checks if the IP version is IPv6 and the IP address is valid, if so, it parses the IP address and port
-    if (ipVersion == "ipv6" && inet_pton(AF_INET6, ipAddress, &hostAddrIpv6)) {
+    if (strcmp(ipVersion, "ipv6") == 0 && inet_pton(AF_INET6, ipAddress, &hostAddrIpv6)) {
         struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *) storage;
 
         ipv6->sin6_family = AF_INET6; // Sets the address family to IPv6
@@ -90,7 +91,7 @@ int serverSocketInit(char *ipVersion, uint16_t port, struct sockaddr_storage *st
 
     memset(storage, 0, sizeof(struct sockaddr_storage)); // Clears the storage structure
 
-    if (ipVersion == "ipv4") {
+    if (strcmp(ipVersion, "ipv4") == 0) {
         struct sockaddr_in *ipv4 = (struct sockaddr_in *) storage;
 
         ipv4->sin_family = AF_INET; // Sets the address family to IPv4
@@ -100,7 +101,7 @@ int serverSocketInit(char *ipVersion, uint16_t port, struct sockaddr_storage *st
         return 0;
     }
 
-    if (ipVersion == "ipv6") {
+    if (strcmp(ipVersion, "ipv6") == 0) {
         struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *) storage;
 
         ipv6->sin6_family = AF_INET6; // Sets the address family to IPv6

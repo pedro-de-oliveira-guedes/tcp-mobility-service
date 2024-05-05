@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
     Client *client = parseClientArguments(argc, argv);
 
     // Connects the client socket to the server socket.
-    if (0 != connect(clientSocket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {
+    if (0 != connect(client->socket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {
         logError("Erro ao conectar ao servidor");
     }
 
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
         handleMenuOption(client);
     }
 
-    close(clientSocket);
+    close(client->socket);
 
     return 0;
 }

@@ -56,6 +56,14 @@ void printMenu();
 void handleMenuOption(Client *client);
 
 /**
+ * @brief Connects the client to the server.
+ *
+ * @param client A pointer to the Client object.
+ * @return 0 if the connection was successful, -1 otherwise.
+ */
+int connectToServer(Client *client);
+
+/**
  * @brief Handles the ride request by sending it to the server.
  *
  * @param client A pointer to the Client object.

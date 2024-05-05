@@ -106,6 +106,12 @@ int main(int argc, char **argv) {
         logError("Erro ao conectar ao servidor");
     }
 
+    char connectedAddress[BUFF_SIZE];
+    if (0 != convertAddressToString((struct sockaddr *)&client->storage, connectedAddress, BUFF_SIZE)) {
+        logError("Erro ao converter o endereço do servidor para string");
+    }
+    printf("Conectado ao servidor %s\n", connectedAddress);
+
     while (1) {
         handleMenuOption(client);
     }

@@ -43,6 +43,6 @@ int convertAddressToString(struct sockaddr *address, char *str, size_t strSize);
  * @param storage A pointer to a sockaddr_storage structure to store the result.
  * @return Returns 0 on success, or a negative value if an error occurs.
  */
-int serverSocketAddressInit(char *ipVersion, uint16_t port, struct sockaddr_storage *storage);
+int serverSocketInit(char *ipVersion, uint16_t port, struct sockaddr_storage *storage);
 
 #endif

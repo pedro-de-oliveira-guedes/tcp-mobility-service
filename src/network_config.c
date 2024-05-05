@@ -6,7 +6,7 @@
 
 #include <arpa/inet.h>
 
-int parseAddress(char *ipVersion, char *ipAddress, uint16_t port, struct sockaddr_storage *storage) {
+int clientSocketInit(char *ipVersion, char *ipAddress, uint16_t port, struct sockaddr_storage *storage) {
     if (ipVersion == NULL || ipAddress == NULL) {
         return -1;
     }

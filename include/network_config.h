@@ -28,15 +28,16 @@ int parseAddress(char *ipVersion, char *ipAddress, uint16_t port, struct sockadd
 int convertAddressToString(struct sockaddr *address, char *str, size_t strSize);
 
 /**
- * @brief Initializes a server socket address.
+ * @brief Initializes a server socket address structure.
  *
- * This function initializes a server socket address with the given protocol and port number.
+ * This function initializes the server socket address structure with the given IP version and port number.
+ * It uses every available IP address on the server as the connection address.
  *
- * @param proto The protocol to use (e.g., "tcp" or "udp").
+ * @param ipVersion The IP version (IPv4 or IPv6) to use.
  * @param port The port number to use.
  * @param storage A pointer to a sockaddr_storage structure to store the result.
  * @return Returns 0 on success, or a negative value if an error occurs.
  */
-int serverSocketAddressInit(char *proto, uint16_t port, struct sockaddr_storage *storage);
+int serverSocketAddressInit(char *ipVersion, uint16_t port, struct sockaddr_storage *storage);
 
 #endif

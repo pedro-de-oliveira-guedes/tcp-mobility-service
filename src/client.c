@@ -73,3 +73,26 @@ void handleExit() {
     printf("Saindo do aplicativo...\n");
     exit(0);
 }
+
+int main(int argc, char **argv) {
+    Client *client = parseClientArguments(argc, argv);
+
+    // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
+    int clientSocket = socket(client->storage.ss_family, SOCK_STREAM, 0);
+    if (clientSocket < 0) {
+        logError("Erro ao criar o socket do cliente");
+    }
+
+    // Connects the client socket to the server socket.
+    if (0 != connect(clientSocket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {
+        logError("Erro ao conectar ao servidor");
+    }
+
+    while (1) {
+        handleMenuOption(client);
+    }
+
+    close(clientSocket);
+
+    return 0;
+}

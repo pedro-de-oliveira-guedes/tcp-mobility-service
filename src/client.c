@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#define BUFF_SIZE 1024
+
 Client* createClient(char *ipVersion, char *ipAddress, int port) {
     Client *client = (Client *) malloc(sizeof(Client));
 
@@ -76,6 +78,19 @@ void handleMenuOption(Client *client) {
 
 void handleRideRequest(Client *client) {
     printf("Solicitando corrida...\n");
+
+    // Sends the ride request to the server.
+    if (send(client->socket, &client->coordinates, sizeof(Coordinates), 0) == -1) {
+        logError("Erro ao enviar a solicitação de corrida");
+    }
+
+    // Waits for the server response.
+    char buffer[BUFF_SIZE];
+    if (recv(client->socket, buffer, BUFF_SIZE, 0) == -1) {
+        logError("Erro ao receber a resposta do servidor");
+    }
+
+    printf("Resposta do servidor: %s\n", buffer);
 }
 
 void handleExit() {

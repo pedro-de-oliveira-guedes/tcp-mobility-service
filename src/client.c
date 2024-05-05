@@ -85,12 +85,11 @@ void handleRideRequest(Client *client) {
     }
 
     // Waits for the server response.
-    char buffer[BUFF_SIZE];
-    if (recv(client->socket, buffer, BUFF_SIZE, 0) == -1) {
+    Coordinates driverCoordinates;
+    if (recv(client->socket, &driverCoordinates, sizeof(Coordinates), 0) == -1) {
         logError("Erro ao receber a resposta do servidor");
     }
-
-    printf("Resposta do servidor: %s\n", buffer);
+    printf("Motorista encontrado na localização (%.4f, %.4f)\n", driverCoordinates.latitude, driverCoordinates.longitude);
 }
 
 void handleExit() {
@@ -106,6 +105,7 @@ int main(int argc, char **argv) {
         logError("Erro ao conectar ao servidor");
     }
 
+    // Formats the connection address to string and prints it.
     char connectedAddress[BUFF_SIZE];
     if (0 != convertAddressToString((struct sockaddr *)&client->storage, connectedAddress, BUFF_SIZE)) {
         logError("Erro ao converter o endereço do servidor para string");

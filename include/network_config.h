@@ -8,6 +8,13 @@
 #define NETWORK_CONFIG
 
 /**
+ * @brief Logs an error message and exits the program with failure.
+ *
+ * @param message The error message to be logged.
+ */
+void logError(char *message);
+
+/**
  * @brief Initializes a client socket with the specified IP version, IP address, port, and storage.
  * 
  * This function parses the given IP version, IP address and port number, initializing the client socket.

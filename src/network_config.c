@@ -7,6 +7,12 @@
 
 #include <arpa/inet.h>
 
+void logError(char *message) {
+    perror(message);
+
+    exit(EXIT_FAILURE);
+}
+
 int clientSocketInit(char *ipVersion, char *ipAddress, uint16_t port, struct sockaddr_storage *storage) {
     if (ipVersion == NULL || ipAddress == NULL || port == 0 || storage == NULL) {
         return -1;

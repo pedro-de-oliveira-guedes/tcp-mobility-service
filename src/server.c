@@ -20,13 +20,13 @@ Server* createServer(char *ipVersion, int port) {
 
     // Initializes the server socket address with the specified IP version and port.
     int socketAddressResult = serverSocketInit(ipVersion, (uint16_t)port, &server->storage);
-    if (socketAddressResult < 0) {
+    if (socketAddressResult == -1) {
         logError("Erro ao inicializar o socket do servidor");
     }
 
     // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
     server->socket = socket(server->storage.ss_family, SOCK_STREAM, 0);
-    if (server->socket < 0) {
+    if (server->socket == -1) {
         logError("Erro ao criar o socket do servidor");
     }
 
@@ -87,25 +87,33 @@ void handleRejectRide() {
     printf("\nCorrida rejeitada!\n");
 }
 
-int main(int argc, char **argv) {
-    Server *server = parseServerArguments(argc, argv);
-
+int setupServer(Server *server) {
     // Binds the server socket to the specified address.
-    if (bind(server->socket, (struct sockaddr *)&server->storage, sizeof(server->storage)) < 0) {
-        logError("Erro ao vincular o socket do servidor ao endereço");
+    if (bind(server->socket, (struct sockaddr *)&server->storage, sizeof(server->storage)) == -1) {
+        return -1;
     }
 
     // Listens for incoming connections on the server socket.
-    if (listen(server->socket, 1) < 0) {
-        logError("Erro ao ouvir por conexões no socket do servidor");
+    if (listen(server->socket, 1) == -1) {
+        return -1;
     }
 
     // Formats the connection address to string and prints it.
     char serverAddress[BUFF_SIZE];
     if (0 != convertAddressToString((struct sockaddr *)&server->storage, serverAddress, BUFF_SIZE)) {
-        logError("Erro ao converter o endereço do servidor para string");
+        return -1;
     }
     printf("Servidor escutando em %s\n", serverAddress);
+
+    return 0;
+}
+
+int main(int argc, char **argv) {
+    Server *server = parseServerArguments(argc, argv);
+
+    if (setupServer(server) == -1) {
+        logError("Erro ao configurar o servidor");
+    }
 
     while (1) {
         // Structures to store the client connection information.
@@ -115,7 +123,7 @@ int main(int argc, char **argv) {
         // Accepts the client connection and stores the client address information.
         socklen_t addrlen = sizeof(clientStorage);
         int clientSocket = accept(server->socket, clientAddress, &addrlen);
-        if (clientSocket < 0) {
+        if (clientSocket == -1) {
             logError("Erro ao aceitar a conexão do cliente");
         }
 

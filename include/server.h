@@ -71,4 +71,12 @@ void handleAcceptRide();
  */
 void handleRejectRide();
 
+/**
+ * @brief Sets up the server by binding it to a port, listening for incoming connections and showing the connection address.
+ *
+ * @param server The Server instance.
+ * @return 0 if the server was successfully set up, -1 otherwise.
+ */
+int setupServer(Server *server);
+
 #endif

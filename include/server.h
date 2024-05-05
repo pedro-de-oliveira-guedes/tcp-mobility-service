@@ -11,9 +11,11 @@
 
 typedef struct {
     Coordinates coordinates;
-    char *ipVersion;
-    int port;
     double currentDistance;
+
+    struct sockaddr_storage storage;
+
+    int socket;
 } Server;
 
 Server* createServer(char *ipVersion, int port);

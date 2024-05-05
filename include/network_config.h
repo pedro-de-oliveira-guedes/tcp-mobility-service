@@ -1,19 +1,24 @@
+//---------------------------------------------------------------------
+// File	    : network_config.h
+// Content	: Network configuration header file.
+// Author	: Pedro de Oliveira Guedes
+//---------------------------------------------------------------------
+
 #ifndef NETWORK_CONFIG
 #define NETWORK_CONFIG
 
 /**
- * @brief Parses the given IP address and port and stores the result in the provided sockaddr_storage structure.
+ * @brief Initializes a client socket with the specified IP version, IP address, port, and storage.
+ * 
+ * This function parses the given IP version, IP address and port number, initializing the client socket.
  *
- * This function takes an IP version, IP address, port number, and a pointer to a sockaddr_storage structure.
- * It parses the IP address and port and stores the result in the sockaddr_storage structure.
- *
- * @param ipVersion The IP version (IPv4 or IPv6) to parse.
- * @param ipAddress The IP address to parse.
- * @param port The port number to parse.
- * @param storage A pointer to a sockaddr_storage structure to store the parsed result.
- * @return Returns 0 on success, or a negative value if an error occurs.
+ * @param ipVersion The IP version to use (e.g., "IPv4" or "IPv6").
+ * @param ipAddress The IP address to connect to.
+ * @param port The port number to connect to.
+ * @param storage A pointer to a sockaddr_storage structure to store the socket address information.
+ * @return An integer representing the status of the socket initialization. Returns 0 on success, or a negative value on failure.
  */
-int parseAddress(char *ipVersion, char *ipAddress, uint16_t port, struct sockaddr_storage *storage);
+int clientSocketInit(char *ipVersion, char *ipAddress, uint16_t port, struct sockaddr_storage *storage);
 
 /**
  * @brief Converts the given sockaddr structure to a string.

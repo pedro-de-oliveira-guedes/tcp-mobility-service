@@ -79,4 +79,12 @@ void handleRejectRide();
  */
 int setupServer(Server *server);
 
+/**
+ * @brief Receives a client connection request, accepts it, prints the client address and returns the client socket file descriptor.
+ *
+ * @param server The Server instance.
+ * @return The client socket file descriptor or -1 if an error occurred.
+ */
+int connectToClient(Server *server);
+
 #endif

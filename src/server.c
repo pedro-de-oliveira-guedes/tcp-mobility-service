@@ -108,6 +108,23 @@ int setupServer(Server *server) {
     return 0;
 }
 
+int connectToClient(Server *server) {
+    struct sockaddr_storage clientStorage;
+    socklen_t clientStorageSize = sizeof(clientStorage);
+
+    // Accepts the client connection request.
+    int clientSocket = accept(server->socket, (struct sockaddr *)&clientStorage, &clientStorageSize);
+
+    // Formats the connection address to string and prints it.
+    char clientAddress[BUFF_SIZE];
+    if (0 != convertAddressToString((struct sockaddr *)&clientStorage, clientAddress, BUFF_SIZE)) {
+        return -1;
+    }
+    printf("Conexão aceita de %s\n", clientAddress);
+
+    return clientSocket;
+}
+
 int main(int argc, char **argv) {
     Server *server = parseServerArguments(argc, argv);
 
@@ -116,30 +133,16 @@ int main(int argc, char **argv) {
     }
 
     while (1) {
-        // Structures to store the client connection information.
-        struct sockaddr_storage clientStorage;
-        struct sockaddr *clientAddress = (struct sockaddr *)&clientStorage;
-
-        // Accepts the client connection and stores the client address information.
-        socklen_t addrlen = sizeof(clientStorage);
-        int clientSocket = accept(server->socket, clientAddress, &addrlen);
+        int clientSocket = connectToClient(server);
         if (clientSocket == -1) {
-            logError("Erro ao aceitar a conexão do cliente");
+            logError("Erro ao conectar com o cliente");
         }
-
-        // Formats the client address to string and prints it.
-        char clientAddressString[BUFF_SIZE];
-        if (0 != convertAddressToString(clientAddress, clientAddressString, BUFF_SIZE)) {
-            logError("Erro ao converter o endereço do cliente para string");
-        }
-        printf("Conexão aceita de %s\n", clientAddressString);
 
         // Receives the client coordinates.
         Coordinates clientCoords;
         if (recv(clientSocket, &clientCoords, sizeof(Coordinates), 0) == -1) {
             logError("Erro ao receber as coordenadas do cliente");
         }
-        printf("Coordenadas do cliente: %.4f, %.4f\n", clientCoords.latitude, clientCoords.longitude);
 
         // Sends the driver coordinates to the client.
         if (send(clientSocket, &server->coordinates, sizeof(Coordinates), 0) == -1) {

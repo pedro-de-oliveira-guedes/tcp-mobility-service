@@ -8,6 +8,7 @@
 #define SERVER
 
 #include "coordinates.h"
+#include <sys/socket.h>
 
 typedef struct {
     Coordinates coordinates;

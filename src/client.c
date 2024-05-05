@@ -21,13 +21,13 @@ Client* createClient(char *ipVersion, char *ipAddress, int port) {
 
     // Initializes the client socket address with the specified IP version, IP address and port.
     int socketAddressResult = clientSocketInit(ipVersion, ipAddress, (uint16_t)port, &client->storage);
-    if (socketAddressResult < 0) {
+    if (socketAddressResult == -1) {
         logError("Erro ao inicializar o socket do cliente");
     }
 
     // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
     client->socket = socket(client->storage.ss_family, SOCK_STREAM, 0);
-    if (client->socket < 0) {
+    if (client->socket == -1) {
         logError("Erro ao criar o socket do cliente");
     }
 
@@ -71,7 +71,6 @@ void handleMenuOption(Client *client) {
             break;
         default:
             printf("\nOpção inválida!\n");
-            printMenu();
             break;
     }
 }
@@ -105,11 +104,16 @@ void handleRideRequest(Client *client) {
     }
 
     // Waits for the server response.
-    Coordinates driverCoordinates;
-    if (recv(client->socket, &driverCoordinates, sizeof(Coordinates), 0) == -1) {
+    int rideAccepted;
+    if (recv(client->socket, &rideAccepted, sizeof(int), 0) == -1) {
         logError("Erro ao receber a resposta do servidor");
     }
-    printf("Motorista encontrado na localização (%.4f, %.4f)\n", driverCoordinates.latitude, driverCoordinates.longitude);
+
+    if (rideAccepted) {
+        printf("Corrida aceita!\n");
+    } else {
+        printf("Corrida rejeitada!\n");
+    }
 }
 
 void handleExit() {

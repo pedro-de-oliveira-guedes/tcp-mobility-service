@@ -45,7 +45,7 @@ Client* parseClientArguments(int argc, char **argv) {
         exit(1);
     }
 
-    return createClient(argv[0], argv[1], atoi(argv[2]));
+    return createClient(argv[1], argv[2], atoi(argv[3]));
 }
 
 void printMenu() {

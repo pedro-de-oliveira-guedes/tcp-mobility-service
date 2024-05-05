@@ -79,6 +79,18 @@ void handleMenuOption(Client *client) {
 void handleRideRequest(Client *client) {
     printf("Solicitando corrida...\n");
 
+    // Connects the client socket to the server socket.
+    if (0 != connect(client->socket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {
+        logError("Erro ao conectar ao servidor");
+    }
+
+    // Formats the connection address to string and prints it.
+    char connectedAddress[BUFF_SIZE];
+    if (0 != convertAddressToString((struct sockaddr *)&client->storage, connectedAddress, BUFF_SIZE)) {
+        logError("Erro ao converter o endereço do servidor para string");
+    }
+    printf("Conectado ao servidor %s\n", connectedAddress);
+
     // Sends the ride request to the server.
     if (send(client->socket, &client->coordinates, sizeof(Coordinates), 0) == -1) {
         logError("Erro ao enviar a solicitação de corrida");
@@ -99,18 +111,6 @@ void handleExit() {
 
 int main(int argc, char **argv) {
     Client *client = parseClientArguments(argc, argv);
-
-    // Connects the client socket to the server socket.
-    if (0 != connect(client->socket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {
-        logError("Erro ao conectar ao servidor");
-    }
-
-    // Formats the connection address to string and prints it.
-    char connectedAddress[BUFF_SIZE];
-    if (0 != convertAddressToString((struct sockaddr *)&client->storage, connectedAddress, BUFF_SIZE)) {
-        logError("Erro ao converter o endereço do servidor para string");
-    }
-    printf("Conectado ao servidor %s\n", connectedAddress);
 
     while (1) {
         handleMenuOption(client);

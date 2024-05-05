@@ -59,17 +59,17 @@ void printRideOptions(Coordinates *clientCoords, Server *server);
  * @param clientCoords The coordinates of the client.
  * @param server The Server instance.
  */
-void handleDriverOptions(Coordinates *clientCoords, Server *server);
+void handleDriverOptions(Coordinates *clientCoords, Server *server, int clientSocket);
 
 /**
  * @brief Handles the acceptance of a ride request.
  */
-void handleAcceptRide();
+void handleAcceptRide(int clientSocket);
 
 /**
  * @brief Handles the rejection of a ride request.
  */
-void handleRejectRide();
+void handleRejectRide(int clientSocket);
 
 /**
  * @brief Sets up the server by binding it to a port, listening for incoming connections and showing the connection address.

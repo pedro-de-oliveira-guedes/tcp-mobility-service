@@ -12,6 +12,9 @@
 
 #define BUFF_SIZE 1024
 
+#define RIDE_ACCEPTED 1
+#define RIDE_REJECTED 0
+
 Server* createServer(char *ipVersion, int port) {
     Server *server = (Server *) malloc(sizeof(Server));
 
@@ -58,7 +61,7 @@ void printRideOptions(Coordinates *clientCoords, Server *server) {
     printf("========================================================================\n");
 }
 
-void handleDriverOptions(Coordinates *clientCoords, Server *server) {
+void handleDriverOptions(Coordinates *clientCoords, Server *server, int clientSocket) {
     int option;
 
     printRideOptions(clientCoords, server);
@@ -67,24 +70,33 @@ void handleDriverOptions(Coordinates *clientCoords, Server *server) {
 
     switch (option) {
         case 0:
-            handleRejectRide();
+            handleRejectRide(clientSocket);
             break;
         case 1:
-            handleAcceptRide();
+            handleAcceptRide(clientSocket);
             break;
         default:
             printf("\nOpção inválida!\n");
-            printRideOptions(clientCoords, server);
             break;
     }
 }
 
-void handleAcceptRide() {
+void handleAcceptRide(int clientSocket) {
     printf("\nCorrida aceita!\n");
+
+    // Sends the driver confirmation to the client.
+    if (send(clientSocket, RIDE_ACCEPTED, sizeof(int), 0) == -1) {
+        logError("Erro ao enviar as coordenadas do motorista para o cliente");
+    }
 }
 
-void handleRejectRide() {
+void handleRejectRide(int clientSocket) {
     printf("\nCorrida rejeitada!\n");
+
+    // Sends the driver rejection to the client.
+    if (send(clientSocket, RIDE_REJECTED, sizeof(int), 0) == -1) {
+        logError("Erro ao enviar a rejeição da corrida para o cliente");
+    }
 }
 
 int setupServer(Server *server) {
@@ -144,12 +156,7 @@ int main(int argc, char **argv) {
             logError("Erro ao receber as coordenadas do cliente");
         }
 
-        // Sends the driver coordinates to the client.
-        if (send(clientSocket, &server->coordinates, sizeof(Coordinates), 0) == -1) {
-            logError("Erro ao enviar as coordenadas do motorista para o cliente");
-        }
-
-        handleDriverOptions(&clientCoords, server);
+        handleDriverOptions(&clientCoords, server, clientSocket);
     }
 
     close(server->socket);

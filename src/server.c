@@ -12,9 +12,6 @@
 
 #define BUFF_SIZE 1024
 
-#define RIDE_ACCEPTED 1
-#define RIDE_REJECTED 0
-
 Server* createServer(char *ipVersion, int port) {
     Server *server = (Server *) malloc(sizeof(Server));
 
@@ -85,7 +82,8 @@ void handleAcceptRide(int clientSocket) {
     printf("\nCorrida aceita!\n");
 
     // Sends the driver confirmation to the client.
-    if (send(clientSocket, RIDE_ACCEPTED, sizeof(int), 0) == -1) {
+    int rideAccepted = 1;
+    if (send(clientSocket, &rideAccepted, sizeof(int), 0) == -1) {
         logError("Erro ao enviar as coordenadas do motorista para o cliente");
     }
 }
@@ -94,7 +92,8 @@ void handleRejectRide(int clientSocket) {
     printf("\nCorrida rejeitada!\n");
 
     // Sends the driver rejection to the client.
-    if (send(clientSocket, RIDE_REJECTED, sizeof(int), 0) == -1) {
+    int rideRejected = 0;
+    if (send(clientSocket, &rideRejected, sizeof(int), 0) == -1) {
         logError("Erro ao enviar a rejeição da corrida para o cliente");
     }
 }

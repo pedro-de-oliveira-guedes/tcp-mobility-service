@@ -11,9 +11,8 @@
 
 typedef struct {
     Coordinates coordinates;
-    char *ipVersion;
-    char *ipAddress;
-    int port;
+    
+    struct sockaddr_storage storage;
 } Client;
 
 Client* createClient(char *ipVersion, char *ipAddress, int port);

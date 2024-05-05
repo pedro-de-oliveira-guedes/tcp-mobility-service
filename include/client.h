@@ -9,6 +9,8 @@
 
 #include "coordinates.h"
 
+#include <arpa/inet.h>
+
 typedef struct {
     Coordinates coordinates;
     

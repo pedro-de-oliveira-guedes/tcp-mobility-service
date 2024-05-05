@@ -13,6 +13,8 @@ typedef struct {
     Coordinates coordinates;
     
     struct sockaddr_storage storage;
+
+    int socket;
 } Client;
 
 Client* createClient(char *ipVersion, char *ipAddress, int port);

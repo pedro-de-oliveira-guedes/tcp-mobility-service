@@ -17,8 +17,17 @@ Client* createClient(char *ipVersion, char *ipAddress, int port) {
     Coordinates coordinates = {-16.055684212815216, -45.14319316648692};
     client->coordinates = coordinates;
 
-    struct sockaddr_storage socketStorage;
-    clientSocketInit(ipVersion, ipAddress, (uint16_t)port, &socketStorage);
+    // Initializes the client socket address with the specified IP version, IP address and port.
+    int socketAddressResult = clientSocketInit(ipVersion, ipAddress, (uint16_t)port, &client->storage);
+    if (socketAddressResult < 0) {
+        logError("Erro ao inicializar o socket do cliente");
+    }
+
+    // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
+    client->socket = socket(client->storage.ss_family, SOCK_STREAM, 0);
+    if (client->socket < 0) {
+        logError("Erro ao criar o socket do cliente");
+    }
 
     return client;
 }
@@ -76,12 +85,6 @@ void handleExit() {
 
 int main(int argc, char **argv) {
     Client *client = parseClientArguments(argc, argv);
-
-    // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
-    int clientSocket = socket(client->storage.ss_family, SOCK_STREAM, 0);
-    if (clientSocket < 0) {
-        logError("Erro ao criar o socket do cliente");
-    }
 
     // Connects the client socket to the server socket.
     if (0 != connect(clientSocket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {

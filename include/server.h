@@ -19,12 +19,56 @@ typedef struct {
     int socket;
 } Server;
 
+/**
+ * @brief Creates a new Server instance.
+ *
+ * @param ipVersion The IP version to use for the server.
+ * @param port The port number to bind the server to.
+ * @return A pointer to the newly created Server instance.
+ */
 Server* createServer(char *ipVersion, int port);
+
+/**
+ * @brief Prints the usage information for the server.
+ */
 void printServerUsage();
+
+/**
+ * @brief Parses the command line arguments and creates a new Server instance.
+ *
+ * @param argc The number of command line arguments.
+ * @param argv The array of command line arguments.
+ * @return A pointer to the newly created Server instance.
+ */
 Server* parseServerArguments(int argc, char **argv);
+
+/**
+ * @brief Prints the available ride options for a client at the given coordinates.
+ *
+ * @param clientCoords The coordinates of the client.
+ * @param server The Server instance.
+ */
 void printRideOptions(Coordinates *clientCoords, Server *server);
+
+/**
+ * @brief Shows the driver the available options for the ride request, 
+ * calling functions to handle the acceptance or rejection of the ride.
+ * 
+ * It also shows the distance between the client and the driver.
+ *
+ * @param clientCoords The coordinates of the client.
+ * @param server The Server instance.
+ */
 void handleDriverOptions(Coordinates *clientCoords, Server *server);
+
+/**
+ * @brief Handles the acceptance of a ride request.
+ */
 void handleAcceptRide();
+
+/**
+ * @brief Handles the rejection of a ride request.
+ */
 void handleRejectRide();
 
 #endif

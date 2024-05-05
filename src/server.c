@@ -1,15 +1,31 @@
 #include "server.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
 Server* createServer(char *ipVersion, int port) {
     Server *server = (Server *) malloc(sizeof(Server));
 
-    server->coordinates.latitude = -19.9227;
-    server->coordinates.longitude = -43.9451;
-    server->ipVersion = ipVersion;
-    server->port = port;
+    Coordinates coordinates = {-19.9227, -43.9451};
+    server->coordinates = coordinates;
+
+    // Initializes the server socket address with the specified IP version and port.
+    int socketAddressResult = serverSocketInit(ipVersion, (uint16_t)port, &server->storage);
+    if (socketAddressResult < 0) {
+        logError("Erro ao inicializar o socket do servidor");
+    }
+
+    // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
+    server->socket = socket(server->storage.ss_family, SOCK_STREAM, 0);
+    if (server->socket < 0) {
+        logError("Erro ao criar o socket do servidor");
+    }
 
     return server;
 }

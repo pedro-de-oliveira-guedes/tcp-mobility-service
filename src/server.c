@@ -96,6 +96,8 @@ void handleRejectRide(int clientSocket) {
     if (send(clientSocket, &rideRejected, sizeof(int), 0) == -1) {
         logError("Erro ao enviar a rejeição da corrida para o cliente");
     }
+
+    close(clientSocket);
 }
 
 int setupServer(Server *server) {

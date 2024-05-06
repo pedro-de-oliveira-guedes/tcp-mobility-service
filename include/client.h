@@ -64,6 +64,13 @@ void handleMenuOption(Client *client);
 int connectToServer(Client *client);
 
 /**
+ * @brief Tracks the driver's location, printing the current distance to the client.
+ *
+ * @param client A pointer to the Client object.
+ */
+void trackDriverLocation(Client *client);
+
+/**
  * @brief Handles the ride request by sending it to the server.
  *
  * @param client A pointer to the Client object.

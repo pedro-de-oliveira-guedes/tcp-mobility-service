@@ -16,7 +16,7 @@
 Client* createClient(char *ipVersion, char *ipAddress, int port) {
     Client *client = (Client *) malloc(sizeof(Client));
 
-    Coordinates coordinates = {-16.055684212815216, -45.14319316648692};
+    Coordinates coordinates = {-19.930547371307195, -43.978467580237876};
     client->coordinates = coordinates;
 
     // Initializes the client socket address with the specified IP version, IP address and port.
@@ -111,6 +111,8 @@ void handleRideRequest(Client *client) {
 
     if (rideAccepted) {
         printf("Corrida aceita!\n");
+        trackDriverLocation(client);
+        exit(0);
     } else {
         printf("Corrida rejeitada!\n");
     }
@@ -119,6 +121,24 @@ void handleRideRequest(Client *client) {
 void handleExit() {
     printf("Saindo do aplicativo...\n");
     exit(0);
+}
+
+void trackDriverLocation(Client *client) {
+    double currentDistance;
+
+    while (1) {
+        if (recv(client->socket, &currentDistance, sizeof(double), 0) == -1) {
+            logError("Erro ao receber a distância atual do motorista");
+        }
+
+        if (currentDistance < 0.0) {
+            break;
+        }
+
+        printf("Distância atual do motorista: %.2f metros\n", currentDistance);
+    }
+
+    printf("O motorista chegou até você!\n");
 }
 
 int main(int argc, char **argv) {

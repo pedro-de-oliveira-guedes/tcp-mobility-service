@@ -30,6 +30,11 @@ Server* createServer(char *ipVersion, int port) {
         logError("Erro ao criar o socket do servidor");
     }
 
+    // Allows the server to reuse the address and port number immediately after the server is terminated.
+    if (setsockopt(server->socket, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) == -1) {
+        logError("Erro ao configurar a reutilização do endereço e porta do servidor");
+    }
+
     return server;
 }
 

@@ -78,15 +78,7 @@ void handleDriverOptions(Coordinates *clientCoords, Server *server, int clientSo
     }
 }
 
-void handleAcceptRide(Server *server, int clientSocket) {
-    printf("\nCorrida aceita!\n");
-
-    // Sends the driver confirmation to the client.
-    int rideAccepted = 1;
-    if (send(clientSocket, &rideAccepted, sizeof(int), 0) == -1) {
-        logError("Erro ao enviar a confirmação da corrida para o cliente");
-    }
-
+void updateDriverDistance(Server *server, int clientSocket) {
     while (server->currentDistance >= 0.0) {
         // Sends the current distance to the client.
         if (send(clientSocket, &server->currentDistance, sizeof(double), 0) == -1) {
@@ -101,6 +93,18 @@ void handleAcceptRide(Server *server, int clientSocket) {
     if (send(clientSocket, &server->currentDistance, sizeof(double), 0) == -1) {
         logError("Erro ao enviar a confirmação de chegada ao destino para o cliente");
     }
+}
+
+void handleAcceptRide(Server *server, int clientSocket) {
+    printf("\nCorrida aceita!\n");
+
+    // Sends the driver confirmation to the client.
+    int rideAccepted = 1;
+    if (send(clientSocket, &rideAccepted, sizeof(int), 0) == -1) {
+        logError("Erro ao enviar a confirmação da corrida para o cliente");
+    }
+
+    updateDriverDistance(server, clientSocket);
     
     printf("\nVocê chegou ao seu destino!\n");
     close(clientSocket);
@@ -164,6 +168,8 @@ int main(int argc, char **argv) {
     }
 
     while (1) {
+        printf("\nAguardando solicitação de corrida...\n");
+
         int clientSocket = connectToClient(server);
         if (clientSocket == -1) {
             logError("Erro ao conectar com o cliente");

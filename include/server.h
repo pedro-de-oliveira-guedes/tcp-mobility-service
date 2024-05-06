@@ -62,6 +62,13 @@ void printRideOptions(Coordinates *clientCoords, Server *server);
 void handleDriverOptions(Coordinates *clientCoords, Server *server, int clientSocket);
 
 /**
+ * @brief Updates the distance between driver and client, sending it over to the client.
+ *
+ * @param server The Server instance.
+ */
+void updateDriverDistance(Server *server, int clientSocket);
+
+/**
  * @brief Handles the acceptance of a ride request.
  */
 void handleAcceptRide(Server *server, int clientSocket);

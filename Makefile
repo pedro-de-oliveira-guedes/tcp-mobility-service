@@ -18,7 +18,10 @@ SERVER_OBJS = $(OBJ)/coordinates.o $(OBJ)/server.o $(OBJ)/network_config.o
 SERVER_HDRS = $(INC)/coordinates.h $(INC)/server.h $(INC)/network_config.h
 SERVER_EXE = $(BIN)/server
 
-all: $(CLIENT_EXE) $(SERVER_EXE)
+folders:
+	mkdir -p $(OBJ) $(BIN)
+
+all: folders $(CLIENT_EXE) $(SERVER_EXE)
 
 $(CLIENT_EXE): $(CLIENT_OBJS)
 	$(CC) -pg -o $(CLIENT_EXE) $(CLIENT_OBJS) $(LIBS)

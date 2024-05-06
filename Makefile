@@ -42,4 +42,4 @@ $(OBJ)/network_config.o: $(SRC)/network_config.c $(CLIENT_HDRS) $(SERVER_HDRS)
 	$(CC) $(CFLAGS) $(SRC)/network_config.c -o $(OBJ)/network_config.o
 
 clean:
-	rm -f $(OBJ)/*.o $(BIN)/*
+	rm -rf $(OBJ) $(BIN)

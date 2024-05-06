@@ -25,12 +25,6 @@ Client* createClient(char *ipVersion, char *ipAddress, int port) {
         logError("Erro ao inicializar o socket do cliente");
     }
 
-    // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
-    client->socket = socket(client->storage.ss_family, SOCK_STREAM, 0);
-    if (client->socket == -1) {
-        logError("Erro ao criar o socket do cliente");
-    }
-
     return client;
 }
 
@@ -76,6 +70,12 @@ void handleMenuOption(Client *client) {
 }
 
 int connectToServer(Client *client) {
+    // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
+    client->socket = socket(client->storage.ss_family, SOCK_STREAM, 0);
+    if (client->socket == -1) {
+        logError("Erro ao criar o socket do cliente");
+    }
+
     // Connects the client socket to the server socket.
     if (0 != connect(client->socket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {
         return -1;

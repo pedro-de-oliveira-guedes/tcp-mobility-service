@@ -16,7 +16,7 @@ typedef struct {
     
     struct sockaddr_storage storage;
 
-    int socket;
+    int currentServerSocket;
 } Client;
 
 /**

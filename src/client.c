@@ -71,13 +71,13 @@ void handleMenuOption(Client *client) {
 
 int connectToServer(Client *client) {
     // Creates a socket for TCP communication. The TCP is defined by SOCK_STREAM.
-    client->socket = socket(client->storage.ss_family, SOCK_STREAM, 0);
-    if (client->socket == -1) {
+    client->currentServerSocket = socket(client->storage.ss_family, SOCK_STREAM, 0);
+    if (client->currentServerSocket == -1) {
         logError("Erro ao criar o socket do cliente");
     }
 
     // Connects the client socket to the server socket.
-    if (0 != connect(client->socket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {
+    if (0 != connect(client->currentServerSocket, (struct sockaddr *)&client->storage, sizeof(client->storage))) {
         return -1;
     }
 
@@ -91,43 +91,11 @@ int connectToServer(Client *client) {
     return 0;
 }
 
-void handleRideRequest(Client *client) {
-    printf("Solicitando corrida...\n");
-
-    if (connectToServer(client) == -1) {
-        logError("Erro ao conectar ao servidor");
-    }
-    
-    // Sends the ride request to the server.
-    if (send(client->socket, &client->coordinates, sizeof(Coordinates), 0) == -1) {
-        logError("Erro ao enviar a solicitação de corrida");
-    }
-
-    // Waits for the server response.
-    int rideAccepted;
-    if (recv(client->socket, &rideAccepted, sizeof(int), 0) == -1) {
-        logError("Erro ao receber a resposta do servidor");
-    }
-
-    if (rideAccepted) {
-        printf("Corrida aceita!\n");
-        trackDriverLocation(client);
-        exit(0);
-    } else {
-        printf("Corrida rejeitada!\n");
-    }
-}
-
-void handleExit() {
-    printf("Saindo do aplicativo...\n");
-    exit(0);
-}
-
 void trackDriverLocation(Client *client) {
     double currentDistance;
 
     while (1) {
-        if (recv(client->socket, &currentDistance, sizeof(double), 0) == -1) {
+        if (recv(client->currentServerSocket, &currentDistance, sizeof(double), 0) == -1) {
             logError("Erro ao receber a distância atual do motorista");
         }
 
@@ -141,6 +109,43 @@ void trackDriverLocation(Client *client) {
     printf("O motorista chegou até você!\n");
 }
 
+void handleRideRequest(Client *client) {
+    printf("Solicitando corrida...\n");
+
+    if (connectToServer(client) == -1) {
+        logError("Erro ao conectar ao servidor");
+    }
+    
+    // Sends the ride request to the server.
+    if (send(client->currentServerSocket, &client->coordinates, sizeof(Coordinates), 0) == -1) {
+        logError("Erro ao enviar a solicitação de corrida");
+    }
+
+    // Waits for the server response.
+    int rideAccepted;
+    if (recv(client->currentServerSocket, &rideAccepted, sizeof(int), 0) == -1) {
+        logError("Erro ao receber a resposta do servidor");
+    }
+
+    if (rideAccepted) {
+        printf("Corrida aceita!\n");
+
+        trackDriverLocation(client);
+
+        close(client->currentServerSocket);
+        exit(0);
+    } else {
+        printf("Corrida rejeitada!\n");
+
+        close(client->currentServerSocket);
+    }
+}
+
+void handleExit() {
+    printf("Saindo do aplicativo...\n");
+    exit(0);
+}
+
 int main(int argc, char **argv) {
     Client *client = parseClientArguments(argc, argv);
 
@@ -148,7 +153,7 @@ int main(int argc, char **argv) {
         handleMenuOption(client);
     }
 
-    close(client->socket);
+    close(client->currentServerSocket);
 
     return 0;
 }

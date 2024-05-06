@@ -70,7 +70,7 @@ void handleDriverOptions(Coordinates *clientCoords, Server *server, int clientSo
             handleRejectRide(clientSocket);
             break;
         case 1:
-            handleAcceptRide(clientSocket);
+            handleAcceptRide(server, clientSocket);
             break;
         default:
             printf("\nOpção inválida!\n");
@@ -78,14 +78,32 @@ void handleDriverOptions(Coordinates *clientCoords, Server *server, int clientSo
     }
 }
 
-void handleAcceptRide(int clientSocket) {
+void handleAcceptRide(Server *server, int clientSocket) {
     printf("\nCorrida aceita!\n");
 
     // Sends the driver confirmation to the client.
     int rideAccepted = 1;
     if (send(clientSocket, &rideAccepted, sizeof(int), 0) == -1) {
-        logError("Erro ao enviar as coordenadas do motorista para o cliente");
+        logError("Erro ao enviar a confirmação da corrida para o cliente");
     }
+
+    while (server->currentDistance >= 0.0) {
+        // Sends the current distance to the client.
+        if (send(clientSocket, &server->currentDistance, sizeof(double), 0) == -1) {
+            logError("Erro ao enviar a distância atual do motorista para o cliente");
+        }
+
+        server->currentDistance -= 400.0;
+        sleep(2);
+    }
+
+    // Sends the negative or zero distance to the client, confirming the arrival of the driver
+    if (send(clientSocket, &server->currentDistance, sizeof(double), 0) == -1) {
+        logError("Erro ao enviar a confirmação de chegada ao destino para o cliente");
+    }
+    
+    printf("\nVocê chegou ao seu destino!\n");
+    close(clientSocket);
 }
 
 void handleRejectRide(int clientSocket) {

@@ -64,7 +64,7 @@ void handleDriverOptions(Coordinates *clientCoords, Server *server, int clientSo
 /**
  * @brief Handles the acceptance of a ride request.
  */
-void handleAcceptRide(int clientSocket);
+void handleAcceptRide(Server *server, int clientSocket);
 
 /**
  * @brief Handles the rejection of a ride request.
